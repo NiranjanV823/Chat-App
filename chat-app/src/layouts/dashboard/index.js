@@ -1,11 +1,15 @@
 import { useTheme } from "@emotion/react";
-import { Box, Stack } from "@mui/material";
-import React from "react";
+import { Box, Divider, IconButton, Stack } from "@mui/material";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Logo from "../../assets/Images/logo.ico";
+import { Nav_Buttons } from "../../data/";
+import { Gear } from "phosphor-react";
 
 const DashboardLayout = () => {
+  const [selected, setSelected] = useState(0);
+
   const theme = useTheme();
   console.log(theme);
   return (
@@ -19,7 +23,12 @@ const DashboardLayout = () => {
           padding: 2,
         }}
       >
-        <Stack direction="column" alignItems="center" sx={{ width: "100%" }}>
+        <Stack
+          direction="column"
+          alignItems="center"
+          sx={{ width: "100%" }}
+          spacing={3}
+        >
           <Box
             sx={{
               backgroundColor: theme.palette.primary.main,
@@ -30,6 +39,66 @@ const DashboardLayout = () => {
           >
             <img src={Logo} alt="chat app logo" />
           </Box>
+          <Stack
+            sx={{
+              width: "max-content",
+              direction: "column",
+              alignItems: "center",
+            }}
+            spacing={3}
+          >
+            {Nav_Buttons.map((el) =>
+              el.index === selected ? (
+                <Box
+                  p={1}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: 1.5,
+                  }}
+                >
+                  <IconButton
+                    sx={{ width: "max-content", color: "#fff" }}
+                    key={el.index}
+                  >
+                    {el.icon}
+                  </IconButton>
+                </Box>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    setSelected(el.index);
+                  }}
+                  sx={{ width: "max-content", color: "#000" }}
+                  key={el.index}
+                >
+                  {el.icon}
+                </IconButton>
+              )
+            )}
+            <Divider sx={{ width: "48px" }} />
+            {selected === 3 ? (
+              <Box
+                p={1}
+                sx={{
+                  backgroundColor: theme.palette.primary.main,
+                  borderRadius: 1.5,
+                }}
+              >
+                <IconButton sx={{ width: "max-content", color: "#fff" }}>
+                  <Gear />
+                </IconButton>
+              </Box>
+            ) : (
+              <IconButton
+                sx={{ width: "max-content", color: "#000" }}
+                onClick={() => {
+                  setSelected(3);
+                }}
+              >
+                <Gear />
+              </IconButton>
+            )}
+          </Stack>
         </Stack>
       </Box>
       <Outlet />
